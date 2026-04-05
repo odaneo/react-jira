@@ -1,0 +1,53 @@
+GET /me
+POST /login
+POST /register
+
+GET /projects
+GET /projects/:id
+POST /projects
+PATCH /projects/:id
+DELETE /projects/:id
+
+GET /tasks
+GET /tasks/:id
+POST /tasks
+PATCH /tasks/:id
+DELETE /tasks/:id
+POST /tasks/reorder
+
+GET /kanbans
+GET /kanbans/:id
+POST /kanbans
+PATCH /kanbans/:id
+DELETE /kanbans/:id
+POST /kanbans/reorder
+
+GET /epics
+GET /epics/:id
+POST /epics
+PATCH /epics/:id
+DELETE /epics/:id
+
+GET /users
+GET /users/:id
+POST /users
+PATCH /users/:id
+DELETE /users/:id
+
+GET /taskTypes
+GET /taskTypes/:id
+POST /taskTypes
+PATCH /taskTypes/:id
+DELETE /taskTypes/:id
+
+GET /persons
+GET /persons/:id
+POST /persons
+PATCH /persons/:id
+DELETE /persons/:id
+
+GET /tags
+GET /tags/:id
+POST /tags
+PATCH /tags/:id
+DELETE /tags/:id
