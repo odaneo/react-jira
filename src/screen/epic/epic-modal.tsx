@@ -1,7 +1,6 @@
 import { Form, Input, Modal } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect } from 'react'
-import { UserSelect } from 'components/user-select'
 import { useAddEpic, useEditEpic } from 'utils/epic'
 import { useEpicModal, useEpicQueryKey, useProjectIdInUrl } from './util'
 
@@ -16,7 +15,11 @@ export const EpicModal = () => {
   const { mutateAsync, isLoading } = useMutateEpic(useEpicQueryKey())
 
   useEffect(() => {
-    form.setFieldsValue(editingEpic)
+    form.setFieldsValue({
+      ...editingEpic,
+      start: editingEpic?.start ? new Date(editingEpic.start).toISOString().slice(0, 10) : undefined,
+      end: editingEpic?.end ? new Date(editingEpic.end).toISOString().slice(0, 10) : undefined
+    })
   }, [editingEpic, form])
 
   const closeModal = () => {
@@ -25,9 +28,12 @@ export const EpicModal = () => {
   }
 
   const onFinish = async () => {
+    const values = form.getFieldsValue()
     await mutateAsync({
       ...editingEpic,
-      ...form.getFieldsValue(),
+      ...values,
+      start: values.start ? new Date(values.start).getTime() : undefined,
+      end: values.end ? new Date(values.end).getTime() : undefined,
       projectId,
       id: isEditing ? Number(editingEpicId) : undefined
     })
@@ -49,11 +55,14 @@ export const EpicModal = () => {
         <Form.Item label={'名称'} name={'name'} rules={[{ required: true, message: '请输入任务组名称' }]}>
           <Input placeholder={'请输入任务组名称'} />
         </Form.Item>
-        <Form.Item label={'负责人'} name={'processorId'}>
-          <UserSelect defaultOptionName={'负责人'} />
-        </Form.Item>
         <Form.Item label={'描述'} name={'description'}>
           <Input.TextArea placeholder={'选填'} rows={4} />
+        </Form.Item>
+        <Form.Item label={'开始日期'} name={'start'}>
+          <Input type={'date'} />
+        </Form.Item>
+        <Form.Item label={'结束日期'} name={'end'}>
+          <Input type={'date'} />
         </Form.Item>
       </Form>
     </Modal>

@@ -4,9 +4,20 @@ import { clearObject } from 'utils'
 import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url'
 
 export const useProjectsSearchParams = () => {
-  const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+  const [param, setParam] = useUrlQueryParam(['name', 'personId', 'organization', 'pin'])
 
-  return [useMemo(() => ({ ...param, personId: Number(param.personId) || undefined }), [param]), setParam] as const
+  return [
+    useMemo(
+      () => ({
+        ...param,
+        personId: Number(param.personId) || undefined,
+        organization: param.organization || undefined,
+        pin: param.pin === 'true' ? true : param.pin === 'false' ? false : undefined
+      }),
+      [param]
+    ),
+    setParam
+  ] as const
 }
 
 export const useProjectQueryKey = () => {

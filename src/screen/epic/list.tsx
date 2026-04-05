@@ -6,18 +6,13 @@ import { Epic } from 'types/epic'
 import { Task } from 'types/task'
 import { useDeleteEpic } from 'utils/epic'
 import { useEpicModal, useEpicPreview, useEpicQueryKey } from './util'
-
-interface Users {
-  id: number
-  name: string
-}
+import dayjs from 'dayjs'
 
 interface ListProps extends TableProps<Epic> {
-  users: Users[]
   tasks: Task[]
 }
 
-export const List = React.memo(({ users, tasks, ...props }: ListProps) => {
+export const List = React.memo(({ tasks, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
@@ -34,16 +29,22 @@ export const List = React.memo(({ users, tasks, ...props }: ListProps) => {
           }
         },
         {
-          title: '负责人',
-          render(value, epic) {
-            return users.find(user => user.id === epic.processorId)?.name || '未分配'
-          }
-        },
-        {
           title: '描述',
           dataIndex: 'description',
           render(value) {
             return value || '-'
+          }
+        },
+        {
+          title: '开始日期',
+          render(value, epic) {
+            return epic.start ? dayjs(epic.start).format('YYYY-MM-DD') : '-'
+          }
+        },
+        {
+          title: '结束日期',
+          render(value, epic) {
+            return epic.end ? dayjs(epic.end).format('YYYY-MM-DD') : '-'
           }
         },
         {

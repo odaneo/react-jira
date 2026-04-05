@@ -2,11 +2,13 @@ import { Button, Input } from 'antd'
 import { Row } from 'components/libs'
 import { UserSelect } from 'components/user-select'
 import { useSetUrlSearchParam } from 'utils/url'
-import { useTasksSearchParams } from './util'
+import { useProjectIdInUrl, useTasksSearchParams } from './util'
 import { TaskTypeSelect } from 'components/task-type-select'
+import { EpicSelect } from 'components/epic-select'
 
 export const SearchPanel = () => {
   const searchParams = useTasksSearchParams()
+  const projectId = useProjectIdInUrl()
   const setSearchParams = useSetUrlSearchParam()
 
   const reset = () => {
@@ -14,7 +16,7 @@ export const SearchPanel = () => {
       name: undefined,
       typeId: undefined,
       processorId: undefined,
-      tagId: undefined,
+      reporterId: undefined,
       epicId: undefined
     })
   }
@@ -32,10 +34,21 @@ export const SearchPanel = () => {
         value={searchParams.processorId}
         onChange={value => setSearchParams({ processorId: value })}
       />
+      <UserSelect
+        defaultOptionName={'汇报人'}
+        value={searchParams.reporterId}
+        onChange={value => setSearchParams({ reporterId: value })}
+      />
       <TaskTypeSelect
         defaultOptionName={'类型'}
         value={searchParams.typeId}
         onChange={value => setSearchParams({ typeId: value })}
+      />
+      <EpicSelect
+        projectId={projectId}
+        defaultOptionName={'任务组'}
+        value={searchParams.epicId}
+        onChange={value => setSearchParams({ epicId: value })}
       />
       <Button onClick={reset}>清空筛选条件</Button>
     </Row>

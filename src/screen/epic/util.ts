@@ -13,14 +13,13 @@ export const useProjectIdInUrl = () => {
 export const useProjectInUrl = () => useProject(useProjectIdInUrl())
 
 export const useEpicsSearchParams = () => {
-  const [param] = useUrlQueryParam(['name', 'processorId'])
+  const [param] = useUrlQueryParam(['name'])
   const projectId = useProjectIdInUrl()
 
   return useMemo(
     () => ({
       projectId,
-      name: param.name,
-      processorId: Number(param.processorId) || undefined
+      name: param.name
     }),
     [projectId, param]
   )

@@ -31,7 +31,7 @@ export const List = React.memo(
           {
             title: <Pin checked={true} disabled={true}></Pin>,
             render(value, project) {
-              return <Pin checked={project.pin} onCheckedChange={pinProject(project.id)}></Pin>
+              return <Pin checked={project.pin || false} onCheckedChange={pinProject(project.id)}></Pin>
             }
           },
           {
