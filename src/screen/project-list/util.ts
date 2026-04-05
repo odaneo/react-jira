@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useProject } from 'utils/project'
+import { clearObject } from 'utils'
 import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url'
 
 export const useProjectsSearchParams = () => {
@@ -10,7 +11,7 @@ export const useProjectsSearchParams = () => {
 
 export const useProjectQueryKey = () => {
   const [params] = useProjectsSearchParams()
-  return ['projects', params]
+  return ['projects', clearObject(params)]
 }
 
 export const useProjectModal = () => {
