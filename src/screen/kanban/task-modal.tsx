@@ -1,10 +1,11 @@
 import { useForm } from 'antd/es/form/Form'
 import { useEffect } from 'react'
 import { useDeleteTask, useEditTask } from 'utils/task'
-import { useTaskModal, useTasksQueryKey } from './util'
-import { Modal, Form, Input, Button } from 'antd'
+import { useProjectIdInUrl, useTaskModal, useTasksQueryKey } from './util'
+import { Modal, Form, Input, Button, Switch } from 'antd'
 import { UserSelect } from 'components/user-select'
 import { TaskTypeSelect } from 'components/task-type-select'
+import { EpicSelect } from 'components/epic-select'
 
 const layout = {
   labelCol: { span: 8 },
@@ -14,6 +15,7 @@ const layout = {
 export const TaskModal = () => {
   const [form] = useForm()
   const { editingTask, editingTaskId, close } = useTaskModal()
+  const projectId = useProjectIdInUrl()
 
   const { mutateAsync: editTask, isLoading: editLoading } = useEditTask(useTasksQueryKey())
 
@@ -63,8 +65,20 @@ export const TaskModal = () => {
         <Form.Item label={'经办人'} name={'processorId'}>
           <UserSelect defaultOptionName={'经办人'} />
         </Form.Item>
+        <Form.Item label={'汇报人'} name={'reporterId'}>
+          <UserSelect defaultOptionName={'汇报人'} />
+        </Form.Item>
+        <Form.Item label={'任务组'} name={'epicId'}>
+          <EpicSelect projectId={projectId} defaultOptionName={'任务组'} />
+        </Form.Item>
         <Form.Item label={'类型'} name={'typeId'}>
           <TaskTypeSelect />
+        </Form.Item>
+        <Form.Item label={'备注'} name={'note'}>
+          <Input.TextArea rows={3} />
+        </Form.Item>
+        <Form.Item label={'收藏'} name={'favorite'} valuePropName={'checked'}>
+          <Switch />
         </Form.Item>
       </Form>
       <div style={{ textAlign: 'right' }}>

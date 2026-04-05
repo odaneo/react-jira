@@ -1,7 +1,18 @@
-﻿import { chromium } from 'playwright'
+﻿const { chromium } = require('playwright')
 
 const WEB_URL = 'http://localhost:3000'
 const PASSWORD = '12345678'
+
+const setDateInput = async (page, selector, value, index = 0) => {
+  await page
+    .locator(selector)
+    .nth(index)
+    .evaluate((input, nextValue) => {
+      input.value = nextValue
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+      input.dispatchEvent(new Event('change', { bubbles: true }))
+    }, value)
+}
 
 async function main() {
   const username = `epic_e2e_${Date.now()}`
@@ -33,6 +44,8 @@ async function main() {
   await page.goto(`${WEB_URL}/projects/${projectId}/epic?epicCreate=true`, { waitUntil: 'networkidle' })
   await page.locator('.ant-modal input').first().fill(epicName)
   await page.locator('.ant-modal textarea').first().fill('playwright e2e description')
+  await setDateInput(page, '.ant-modal input[type="date"]', '2026-04-01', 0)
+  await setDateInput(page, '.ant-modal input[type="date"]', '2026-04-10', 1)
   await page.locator('.ant-modal .ant-btn-primary').click()
   await page.locator('tr', { hasText: epicName }).waitFor()
 
@@ -58,6 +71,8 @@ async function main() {
   await page.locator('.ant-dropdown:not(.ant-dropdown-hidden) .ant-dropdown-menu-item').first().click()
   await page.locator('.ant-modal').waitFor()
   await page.locator('.ant-modal input').first().fill(`${epicName} Edited`)
+  await setDateInput(page, '.ant-modal input[type="date"]', '2026-04-03', 0)
+  await setDateInput(page, '.ant-modal input[type="date"]', '2026-04-15', 1)
   await page.locator('.ant-modal .ant-btn-primary').click()
   await page.locator('.ant-modal').waitFor({ state: 'hidden' })
 

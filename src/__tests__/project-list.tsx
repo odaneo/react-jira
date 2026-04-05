@@ -5,6 +5,7 @@ import fakeData from './fake.json'
 import { render, screen, waitFor } from '@testing-library/react'
 import { ProjectListScreen } from 'screen/project-list'
 import { AppProviders } from 'context'
+import { MemoryRouter } from 'react-router-dom'
 
 const apiUrl = process.env.REACT_APP_API_URL
 const fakeAuth = {
@@ -53,7 +54,9 @@ test('搜索项目', async () => {
 })
 
 export const renderScreen = (ui: ReactNode, { route = '/projects' } = {}) => {
-  window.history.pushState({}, 'Test page', route)
-
-  return render(<AppProviders>{ui}</AppProviders>)
+  return render(
+    <MemoryRouter initialEntries={[route]}>
+      <AppProviders>{ui}</AppProviders>
+    </MemoryRouter>
+  )
 }

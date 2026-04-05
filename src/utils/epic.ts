@@ -3,7 +3,9 @@ import { useHttp } from './http'
 import { Epic } from 'types/epic'
 import { useAddConfig, useDeleteConfig, useEditConfig } from './use-optimistic-options'
 
-export const useEpics = (param?: Partial<Epic>) => {
+type EpicQuery = Partial<Pick<Epic, 'id' | 'name' | 'projectId'>>
+
+export const useEpics = (param?: EpicQuery) => {
   const client = useHttp()
   return useQuery<Epic[]>(['epics', param], () => client('epics', { data: param }))
 }

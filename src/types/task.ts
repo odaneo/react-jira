@@ -1,13 +1,16 @@
 export interface Task {
   id: number
   name: string
-  //  经办人
-  processorId: number
-  projectId: number
-  //  任务组
-  epicId: number
-  kanbanId: number
-  // bug or task
-  typeId: number
-  note: string
+  projectId?: number
+  processorId?: number
+  reporterId?: number
+  kanbanId?: number
+  epicId?: number
+  typeId?: number
+  tags?: number[]
+  favorite?: boolean
+  note?: string
+  created?: number
+  ownerId?: number
+  deleted?: boolean
 }

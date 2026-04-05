@@ -5,7 +5,11 @@ import { useDeleteConfig, useEditConfig, useReorderTaskConfig } from './use-opti
 import { useDebounce } from 'utils/index'
 import { SortProps } from './kanban'
 
-export const useTasks = (param?: Partial<Task>) => {
+type TaskQuery = Partial<
+  Pick<Task, 'id' | 'name' | 'projectId' | 'processorId' | 'reporterId' | 'kanbanId' | 'epicId' | 'typeId'>
+>
+
+export const useTasks = (param?: TaskQuery) => {
   const client = useHttp()
   const debouncedParam = { ...param, name: useDebounce(param?.name, 200) }
 

@@ -3,7 +3,6 @@ import { ButtonNoPadding, ErrorBox, Row, ScreenContainer } from 'components/libs
 import { useDocumentTitle, useDebounce } from 'utils'
 import { useEpics } from 'utils/epic'
 import { useTasks } from 'utils/task'
-import { useUsers } from 'utils/users'
 import { EpicModal } from './epic-modal'
 import { EpicTaskPreview } from './epic-task-preview'
 import { List } from './list'
@@ -16,7 +15,6 @@ export const EpicScreen = () => {
   const searchParams = useEpicsSearchParams()
   const { open } = useEpicModal()
   const { data: currentProject } = useProjectInUrl()
-  const { data: users } = useUsers()
   const { data: tasks = [] } = useTasks({ projectId })
   const { data: epics = [], isLoading, error } = useEpics(useDebounce(searchParams, 200))
 
@@ -30,7 +28,7 @@ export const EpicScreen = () => {
       </Row>
       <SearchPanel />
       <ErrorBox error={error} />
-      {isLoading ? <Spin size={'large'} /> : <List dataSource={epics} users={users || []} tasks={tasks} />}
+      {isLoading ? <Spin size={'large'} /> : <List dataSource={epics} tasks={tasks} />}
       <EpicModal />
       <EpicTaskPreview />
     </ScreenContainer>

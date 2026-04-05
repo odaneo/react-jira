@@ -2,6 +2,7 @@ import { Drawer, List, Spin } from 'antd'
 import { useEpic } from 'utils/epic'
 import { useTasks } from 'utils/task'
 import { useEpicPreview, useProjectIdInUrl } from './util'
+import dayjs from 'dayjs'
 
 export const EpicTaskPreview = () => {
   const { epicPreviewId, close } = useEpicPreview()
@@ -23,14 +24,20 @@ export const EpicTaskPreview = () => {
       {isLoading ? (
         <Spin size={'large'} />
       ) : (
-        <List
-          dataSource={tasks || []}
-          renderItem={task => (
-            <List.Item key={task.id}>
-              <List.Item.Meta title={task.name} description={task.note || '无描述'} />
-            </List.Item>
-          )}
-        />
+        <>
+          <p>
+            开始日期: {epic?.start ? dayjs(epic.start).format('YYYY-MM-DD') : '-'} 结束日期:{' '}
+            {epic?.end ? dayjs(epic.end).format('YYYY-MM-DD') : '-'}
+          </p>
+          <List
+            dataSource={tasks || []}
+            renderItem={task => (
+              <List.Item key={task.id}>
+                <List.Item.Meta title={task.name} description={task.note || '无描述'} />
+              </List.Item>
+            )}
+          />
+        </>
       )}
     </Drawer>
   )

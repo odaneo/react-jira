@@ -1,5 +1,6 @@
 import { QueryKey, useMutation, useQuery } from 'react-query'
 import { Project } from 'types/project'
+import { Task } from 'types/task'
 import { useHttp } from './http'
 import { useEditConfig, useAddConfig, useDeleteConfig } from './use-optimistic-options'
 import { clearObject } from 'utils'
@@ -54,7 +55,7 @@ export const useProject = (id?: number) => {
 
 export const useTask = (id?: number) => {
   const client = useHttp()
-  return useQuery<Project>(['task', { id }], () => client(`tasks/${id}`), {
+  return useQuery<Task>(['task', { id }], () => client(`tasks/${id}`), {
     enabled: !!id
   })
 }

@@ -14,8 +14,11 @@ import { Row } from 'components/libs'
 import React from 'react'
 import { Drag, Drop, DropChild } from 'components/drag-and-drag'
 
-const TaskTypeIcon = ({ id }: { id: number }) => {
+const TaskTypeIcon = ({ id }: { id?: number }) => {
   const { data: taskTypes } = useTaskTypes()
+  if (!id) {
+    return null
+  }
 
   const name = taskTypes?.find(taskType => taskType.id === id)?.name
   if (!name) {
