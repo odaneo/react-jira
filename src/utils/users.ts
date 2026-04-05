@@ -1,18 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+import { useQuery } from 'react-query'
 import { User } from 'types/user'
 import { useHttp } from './http'
-import { useAsync } from './use-async'
 import { clearObject } from 'utils'
 
 export const useUsers = (params?: Partial<User>) => {
   const client = useHttp()
-
-  const { run, ...result } = useAsync<User[]>()
-
-  useEffect(() => {
-    run(client('users', { data: clearObject(params || {}) }))
-  }, [params])
-
-  return result
+  const cleanedParams = clearObject(params || {})
+  return useQuery<User[]>(['users', cleanedParams], () => client('users', { data: cleanedParams }), {
+    staleTime: 5 * 60 * 1000
+  })
 }
