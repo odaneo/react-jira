@@ -31,7 +31,10 @@ export const useEditConfig = (queryKey: QueryKey) =>
   )
 
 export const useAddConfig = (queryKey: QueryKey) =>
-  useConfig(queryKey, (target, old: any[] | undefined) => (old ? [...old, target] : []))
+  useConfig(queryKey, (target, old: any[] | undefined) => {
+    const item = target?.id ? target : { ...target, id: Date.now() }
+    return old ? [...old, item] : [item]
+  })
 
 export const useReorderKanbanConfig = (queryKey: QueryKey) =>
   useConfig(queryKey, (target, old) => reorder({ list: old, ...target }))
