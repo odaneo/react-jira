@@ -23,14 +23,20 @@ export const useAddKanban = (queryKey: QueryKey) => {
 
 export const useAddTask = (queryKey: QueryKey) => {
   const client = useHttp()
-  return useMutation(
-    (params: Partial<Task>) =>
-      client(`tasks`, {
-        method: 'POST',
-        data: params
-      }),
-    useAddConfig(queryKey)
-  )
+  return useMutation(async (params: Partial<Task>) => {
+    const createdTask = await client(`tasks`, {
+      method: 'POST',
+      data: params
+    })
+    const reporterId = params.reporterId
+    if (reporterId && createdTask?.reporterId !== reporterId) {
+      return client(`tasks/${createdTask.id}`, {
+        method: 'PATCH',
+        data: { reporterId }
+      })
+    }
+    return createdTask
+  }, useAddConfig(queryKey))
 }
 
 export const useDeleteKanban = (queryKey: QueryKey) => {
