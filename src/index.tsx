@@ -10,14 +10,12 @@ import { Profiler } from 'components/profiler'
 
 loadServer(() =>
   ReactDOM.render(
-    <React.StrictMode>
-      <Profiler id={'Root App'} phases={['mount']}>
-        <AppProviders>
-          <DevTools />
-          <App />
-        </AppProviders>
-      </Profiler>
-    </React.StrictMode>,
+    <Profiler id={'Root App'} phases={['mount']}>
+      <AppProviders>
+        <DevTools />
+        <App />
+      </AppProviders>
+    </Profiler>,
     document.getElementById('root')
   )
 )
