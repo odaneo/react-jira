@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Switch } from 'antd'
+﻿import { Button, Card, Form, Input, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { useAddTask } from 'utils/kanban'
 import { clearObject } from 'utils'
@@ -8,11 +8,22 @@ import { EpicSelect } from 'components/epic-select'
 import { useProjectIdInUrl, useTasksQueryKey, useTasksSearchParams } from './util'
 
 export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
+  const [inputMode, setInputMode] = useState(false)
+
+  const toggle = () => setInputMode(mode => !mode)
+
+  if (!inputMode) {
+    return <div onClick={toggle}>+创建事务</div>
+  }
+
+  return <CreateTaskForm kanbanId={kanbanId} onCancel={toggle} />
+}
+
+const CreateTaskForm = ({ kanbanId, onCancel }: { kanbanId: number; onCancel: () => void }) => {
   const [form] = Form.useForm()
   const { mutateAsync: addTask } = useAddTask(useTasksQueryKey())
   const projectId = useProjectIdInUrl()
   const searchParams = useTasksSearchParams()
-  const [inputMode, setInputMode] = useState(false)
 
   const submit = async () => {
     const values = form.getFieldsValue()
@@ -23,23 +34,13 @@ export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
         kanbanId
       })
     )
-    setInputMode(false)
     form.resetFields()
+    onCancel()
   }
-
-  const toggle = () => setInputMode(mode => !mode)
 
   useEffect(() => {
-    if (inputMode) {
-      form.setFieldsValue({ epicId: searchParams.epicId, favorite: false })
-    } else {
-      form.resetFields()
-    }
-  }, [form, inputMode, searchParams.epicId])
-
-  if (!inputMode) {
-    return <div onClick={toggle}>+创建事务</div>
-  }
+    form.setFieldsValue({ epicId: searchParams.epicId, favorite: false })
+  }, [form, searchParams.epicId])
 
   return (
     <Card>
@@ -66,7 +67,7 @@ export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
           <Switch />
         </Form.Item>
         <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
-          <Button onClick={toggle} style={{ marginRight: '0.8rem' }}>
+          <Button onClick={onCancel} style={{ marginRight: '0.8rem' }}>
             取消
           </Button>
           <Button htmlType={'submit'} type={'primary'}>
