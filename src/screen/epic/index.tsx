@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { Spin } from 'antd'
 import { ButtonNoPadding, ErrorBox, Row, ScreenContainer } from 'components/libs'
 import { useDocumentTitle, useDebounce } from 'utils'
@@ -20,12 +21,12 @@ export const EpicScreen = () => {
 
   return (
     <ScreenContainer>
-      <Row between={true} marginBottom={2}>
+      <PageHeader between={true} marginBottom={2}>
         <h1>{currentProject?.name}任务组</h1>
         <ButtonNoPadding type={'link'} onClick={open}>
           新建任务组
         </ButtonNoPadding>
-      </Row>
+      </PageHeader>
       <SearchPanel />
       <ErrorBox error={error} />
       {isLoading ? <Spin size={'large'} /> : <List dataSource={epics} tasks={tasks} />}
@@ -34,3 +35,7 @@ export const EpicScreen = () => {
     </ScreenContainer>
   )
 }
+
+const PageHeader = styled(Row)`
+  min-height: 4.8rem;
+`
