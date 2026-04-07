@@ -17,11 +17,13 @@ const AuthenticatedApp = () => {
       <BrowserRouter>
         <PageHeader />
         <Main>
-          <Routes>
-            <Route path={'/projects'} element={<ProjectListScreen />}></Route>
-            <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
-            <Navigate to={'/projects'} />
-          </Routes>
+          <MainContent>
+            <Routes>
+              <Route path={'/projects'} element={<ProjectListScreen />}></Route>
+              <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
+              <Navigate to={'/projects'} />
+            </Routes>
+          </MainContent>
         </Main>
         <ProjectModal />
       </BrowserRouter>
@@ -69,13 +71,18 @@ const User = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 6rem 1fr;
+  grid-template-rows: auto 1fr;
   height: 100vh;
+  overflow: hidden;
 `
 const Header = styled(Row)`
-  padding: 3.2rem;
+  position: sticky;
+  top: 0;
+  min-height: 6rem;
+  padding: 0 2.4rem;
+  background: #ffffff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  z-index: 10;
 `
 
 const HeaderLeft = styled(Row)``
@@ -85,4 +92,14 @@ const HeaderRight = styled.div``
 const Main = styled.main`
   display: flex;
   overflow: hidden;
+  min-height: 0;
+  padding: 1.6rem 2.4rem 2.4rem;
+`
+
+const MainContent = styled.div`
+  width: 100%;
+  max-width: 144rem;
+  margin: 0 auto;
+  display: flex;
+  min-height: 0;
 `

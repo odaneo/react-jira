@@ -98,13 +98,13 @@ const More = ({ kanban }: { kanban: Kanban }) => {
 }
 
 export const Container = styled.div`
-  min-width: 27rem;
+  width: clamp(26rem, 28vw, 32rem);
+  min-width: clamp(26rem, 28vw, 32rem);
   border-radius: 6px;
-  background-color: rgb(244, 245, 247);
+  background-color: #f8fafc;
   display: flex;
   flex-direction: column;
   padding: 0.7rem 0.7rem 1rem;
-  margin-right: 1.5rem;
 `
 
 const TasksContainer = styled.div`
