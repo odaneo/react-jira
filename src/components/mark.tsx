@@ -9,7 +9,7 @@ export const Mark = ({ name, keyword }: { name: string; keyword: string }) => {
       {arr.map((str: string, index: number) => (
         <span key={index}>
           {str}
-          {index === arr.length - 1 ? null : <span style={{ color: '#257AFD' }}>{keyword}</span>}
+          {index === arr.length - 1 ? null : <span style={{ color: '#2563EB' }}>{keyword}</span>}
         </span>
       ))}
     </>

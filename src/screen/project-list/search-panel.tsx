@@ -14,7 +14,25 @@ interface SearchPanelProps {
 
 export const SearchPanel = ({ param, setParam }: SearchPanelProps): JSX.Element => {
   return (
-    <Form layout={'inline'} css={{ marginBottom: '2rem' }}>
+    <Form
+      layout={'inline'}
+      css={{
+        marginBottom: '2rem',
+        rowGap: '1.2rem',
+        '.ant-form-item': {
+          marginBottom: '1.2rem'
+        },
+        '@media (max-width: 768px)': {
+          '.ant-form-item': {
+            width: '100%',
+            marginRight: 0
+          },
+          '.ant-input, .ant-select': {
+            width: '100% !important'
+          }
+        }
+      }}
+    >
       <Form.Item>
         <Input
           placeholder={'项目名'}
@@ -55,7 +73,7 @@ export const SearchPanel = ({ param, setParam }: SearchPanelProps): JSX.Element 
       </Form.Item>
       <Form.Item>
         <Select
-          style={{ width: '10rem' }}
+          style={{ width: '12rem' }}
           value={param.pin === undefined ? '' : String(param.pin)}
           onChange={value =>
             setParam({

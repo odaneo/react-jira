@@ -8,7 +8,19 @@ module.exports = {
       options: {
         lessLoaderOptions: {
           lessOptions: {
-            modifyVars: { '@primary-color': 'rgb(0,82,204)', '@font-size-base': '16px' },
+            modifyVars: {
+              '@primary-color': '#2563EB',
+              '@link-color': '#2563EB',
+              '@success-color': '#22C55E',
+              '@warning-color': '#F59E0B',
+              '@error-color': '#EF4444',
+              '@border-color-base': '#E2E8F0',
+              '@component-background': '#FFFFFF',
+              '@body-background': '#F8FAFC',
+              '@text-color': '#1E293B',
+              '@text-color-secondary': '#475569',
+              '@font-size-base': '16px'
+            },
             javascriptEnabled: true
           }
         }

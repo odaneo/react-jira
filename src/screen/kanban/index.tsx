@@ -10,7 +10,7 @@ import {
 import { KanbanColumn } from './kanban-column'
 import styled from '@emotion/styled'
 import { SearchPanel } from './search-panel'
-import { ScreenContainer } from 'components/libs'
+import { Row, ScreenContainer } from 'components/libs'
 import { useReorderTask, useTasks } from 'utils/task'
 import { Spin } from 'antd'
 import { CreateKanban } from './create-kanban'
@@ -33,14 +33,16 @@ export const KanbanScreen = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <ScreenContainer>
-        <h1>{currentProject?.name}看板</h1>
+        <PageHeader between={true} marginBottom={2}>
+          <h1>{currentProject?.name}看板</h1>
+        </PageHeader>
         <SearchPanel />
         {isLoading ? (
           <Spin size={'large'} />
         ) : (
           <ColumnsContainer>
             <Drop type={'COLUMN'} direction={'horizontal'} droppableId={'kanban'}>
-              <DropChild style={{ display: `flex` }}>
+              <DropChild style={{ display: 'flex' }}>
                 {kanbans?.map((kanban, index) => (
                   <Drag key={kanban.id} draggableId={'kanban' + kanban.id} index={index}>
                     <KanbanColumn kanban={kanban} key={kanban.id} />
@@ -75,18 +77,18 @@ export const useDragEnd = () => {
         if (!fromId || !toId || fromId === toId) {
           return
         }
-        const type = destination.index > source.index ? 'after' : 'before'
+        const dragType = destination.index > source.index ? 'after' : 'before'
 
-        reorderKanban({ fromId, referenceId: toId, type })
+        reorderKanban({ fromId, referenceId: toId, type: dragType })
       }
       if (type === 'ROW') {
         const fromKanbanId = +source.droppableId
         const toKanbanId = +destination.droppableId
 
         if (fromKanbanId === toKanbanId) {
-          // 非跨看板排序
           return
         }
+
         const fromTask = allTasks.filter(task => task.kanbanId === fromKanbanId)[source.index]
         const toTask = allTasks.filter(task => task.kanbanId === toKanbanId)[destination.index]
         if (fromTask?.id === toTask?.id) {
@@ -105,8 +107,18 @@ export const useDragEnd = () => {
   )
 }
 
+const PageHeader = styled(Row)`
+  min-height: 4.8rem;
+`
+
 export const ColumnsContainer = styled.div`
   display: flex;
-  overflow-x: scroll;
+  overflow-x: auto;
   flex: 1;
+  gap: 1.6rem;
+  padding: 0.4rem 0.4rem 1.2rem;
+
+  @media (max-width: 768px) {
+    padding-bottom: 0.8rem;
+  }
 `
