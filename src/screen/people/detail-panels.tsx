@@ -38,73 +38,91 @@ export const PeopleDetailPanels = ({ userId, tasks, projects }: PeopleDetailPane
     <PanelGrid>
       <PanelCard>
         <PanelHeader>
-          <div>
-            <h2>我负责的任务</h2>
-            <p>查看当前由我推进的任务。</p>
-          </div>
-          <ToggleButton
-            type="button"
-            onClick={() => setCollapsed(state => ({ ...state, ownedTasks: !state.ownedTasks }))}
-          >
-            切换我负责的任务
-          </ToggleButton>
+          <PanelHeading>
+            <PanelTitleRow>
+              <h2>我负责的任务</h2>
+              <FoldButton
+                type="button"
+                aria-label={collapsed.ownedTasks ? '展开我负责的任务' : '收起我负责的任务'}
+                aria-expanded={!collapsed.ownedTasks}
+                onClick={() => setCollapsed(state => ({ ...state, ownedTasks: !state.ownedTasks }))}
+              >
+                {collapsed.ownedTasks ? '+' : '-'}
+              </FoldButton>
+            </PanelTitleRow>
+            {!collapsed.ownedTasks ? <p>查看当前由我推进的任务。</p> : null}
+          </PanelHeading>
         </PanelHeader>
         {!collapsed.ownedTasks ? (
-          <TaskList>
-            {ownedTasks.map(task => (
-              <li key={task.id}>{task.name}</li>
-            ))}
-            {!ownedTasks.length ? <li>暂无负责中的任务</li> : null}
-          </TaskList>
+          <PanelContent>
+            <TaskList>
+              {ownedTasks.map(task => (
+                <li key={task.id}>{task.name}</li>
+              ))}
+              {!ownedTasks.length ? <li>暂无负责中的任务</li> : null}
+            </TaskList>
+          </PanelContent>
         ) : null}
       </PanelCard>
 
       <PanelCard>
         <PanelHeader>
-          <div>
-            <h2>我汇报的任务</h2>
-            <p>查看需要我跟进汇报的任务。</p>
-          </div>
-          <ToggleButton
-            type="button"
-            onClick={() => setCollapsed(state => ({ ...state, reportedTasks: !state.reportedTasks }))}
-          >
-            切换我汇报的任务
-          </ToggleButton>
+          <PanelHeading>
+            <PanelTitleRow>
+              <h2>我汇报的任务</h2>
+              <FoldButton
+                type="button"
+                aria-label={collapsed.reportedTasks ? '展开我汇报的任务' : '收起我汇报的任务'}
+                aria-expanded={!collapsed.reportedTasks}
+                onClick={() => setCollapsed(state => ({ ...state, reportedTasks: !state.reportedTasks }))}
+              >
+                {collapsed.reportedTasks ? '+' : '-'}
+              </FoldButton>
+            </PanelTitleRow>
+            {!collapsed.reportedTasks ? <p>查看需要我跟进汇报的任务。</p> : null}
+          </PanelHeading>
         </PanelHeader>
         {!collapsed.reportedTasks ? (
-          <TaskList>
-            {reportedTasks.map(task => (
-              <li key={task.id}>{task.name}</li>
-            ))}
-            {!reportedTasks.length ? <li>暂无需要我汇报的任务</li> : null}
-          </TaskList>
+          <PanelContent>
+            <TaskList>
+              {reportedTasks.map(task => (
+                <li key={task.id}>{task.name}</li>
+              ))}
+              {!reportedTasks.length ? <li>暂无需要我汇报的任务</li> : null}
+            </TaskList>
+          </PanelContent>
         ) : null}
       </PanelCard>
 
       <PanelCard>
         <PanelHeader>
-          <div>
-            <h2>我参与的项目</h2>
-            <p>快速跳转到我当前负责的项目看板。</p>
-          </div>
-          <ToggleButton
-            type="button"
-            onClick={() => setCollapsed(state => ({ ...state, ownedProjects: !state.ownedProjects }))}
-          >
-            切换我参与的项目
-          </ToggleButton>
+          <PanelHeading>
+            <PanelTitleRow>
+              <h2>我参与的项目</h2>
+              <FoldButton
+                type="button"
+                aria-label={collapsed.ownedProjects ? '展开我参与的项目' : '收起我参与的项目'}
+                aria-expanded={!collapsed.ownedProjects}
+                onClick={() => setCollapsed(state => ({ ...state, ownedProjects: !state.ownedProjects }))}
+              >
+                {collapsed.ownedProjects ? '+' : '-'}
+              </FoldButton>
+            </PanelTitleRow>
+            {!collapsed.ownedProjects ? <p>快速跳转到我当前负责的项目看板。</p> : null}
+          </PanelHeading>
         </PanelHeader>
         {!collapsed.ownedProjects ? (
-          <ProjectList>
-            {ownedProjects.map(project => (
-              <li key={project.id}>
-                <Link to={`/projects/${project.id}/kanban`}>{project.name}</Link>
-                <span>{project.organization || '未填写组织'}</span>
-              </li>
-            ))}
-            {!ownedProjects.length ? <li>暂无参与中的项目</li> : null}
-          </ProjectList>
+          <PanelContent>
+            <ProjectList>
+              {ownedProjects.map(project => (
+                <li key={project.id}>
+                  <Link to={`/projects/${project.id}/kanban`}>{project.name}</Link>
+                  <span>{project.organization || '未填写组织'}</span>
+                </li>
+              ))}
+              {!ownedProjects.length ? <li>暂无参与中的项目</li> : null}
+            </ProjectList>
+          </PanelContent>
         ) : null}
       </PanelCard>
 
@@ -154,31 +172,55 @@ const FilterCard = styled(PanelCard)`
 `
 
 const PanelHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 1.2rem;
-  margin-bottom: 1.2rem;
+  display: block;
 
   h2 {
-    margin-bottom: 0.6rem;
+    margin: 0;
   }
 
   p {
-    margin: 0;
+    margin: 0.8rem 0 0;
     color: #475569;
     line-height: 1.5;
   }
 `
 
-const ToggleButton = styled.button`
-  align-self: flex-start;
-  border: none;
+const PanelHeading = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+`
+
+const PanelTitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2rem;
+`
+
+const FoldButton = styled.button`
+  flex: 0 0 auto;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 1px solid #bfdbfe;
   border-radius: 999px;
-  background: #dbeafe;
+  background: #eff6ff;
   color: #1d4ed8;
-  padding: 0.8rem 1.2rem;
+  padding: 0;
   cursor: pointer;
   font-weight: 600;
+  font-size: 1.8rem;
+  line-height: 1;
+
+  &:hover {
+    background: #dbeafe;
+  }
+`
+
+const PanelContent = styled.div`
+  margin-top: 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid #e2e8f0;
 `
 
 const TaskList = styled.ul`

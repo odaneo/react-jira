@@ -29,7 +29,12 @@ test('supports collapsing panels and filtering by project keyword', async () => 
   expect(screen.getByText('Build filters')).toBeInTheDocument()
   expect(screen.queryByText('Ship dashboard')).not.toBeInTheDocument()
 
-  await userEvent.click(screen.getByRole('button', { name: '切换我负责的任务' }))
+  expect(screen.getByRole('button', { name: '收起我负责的任务' })).toHaveAttribute('aria-expanded', 'true')
+  expect(screen.getByRole('button', { name: '收起我汇报的任务' })).toHaveAttribute('aria-expanded', 'true')
+  expect(screen.getByRole('button', { name: '收起我参与的项目' })).toHaveAttribute('aria-expanded', 'true')
+
+  await userEvent.click(screen.getByRole('button', { name: '收起我负责的任务' }))
 
   expect(screen.queryByText('Build filters')).not.toBeInTheDocument()
+  expect(screen.getByRole('button', { name: '展开我负责的任务' })).toHaveAttribute('aria-expanded', 'false')
 })
