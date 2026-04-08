@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
-import { URLSearchParamsInit, useSearchParams } from 'react-router-dom'
+import { URLSearchParamsInit, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { clearObject } from 'utils'
 
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
   const [searchParams] = useSearchParams()
   const setSearchParams = useSetUrlSearchParam()
+
   return [
     useMemo(() => {
       return keys.reduce((prev: { [key in K]: string }, key: K) => {
@@ -19,11 +20,21 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
 }
 
 export const useSetUrlSearchParam = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   return (params: { [key in string]: unknown }) => {
-    // iterator 遍历器
-    const o = clearObject({ ...Object.fromEntries(searchParams), ...params }) as URLSearchParamsInit
-    return setSearchParams(o)
+    const nextParams = clearObject({ ...Object.fromEntries(searchParams), ...params }) as URLSearchParamsInit
+    const searchRecord = Object.entries(nextParams).reduce((record, [key, value]) => {
+      record[key] = Array.isArray(value) ? value.join(',') : String(value)
+      return record
+    }, {} as Record<string, string>)
+    const nextSearch = new URLSearchParams(searchRecord).toString()
+
+    return navigate({
+      pathname: location.pathname,
+      search: nextSearch ? `?${nextSearch}` : ''
+    })
   }
 }

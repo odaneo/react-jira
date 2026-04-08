@@ -4,6 +4,10 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 
+if (!process.env.REACT_APP_API_URL) {
+  process.env.REACT_APP_API_URL = 'http://localhost'
+}
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({

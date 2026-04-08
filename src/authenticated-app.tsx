@@ -1,15 +1,15 @@
 import styled from '@emotion/styled'
-import { useAuth } from 'context/auth-context'
-import { ProjectListScreen } from 'screen/project-list/index'
-import { Row } from 'components/libs'
 import { Dropdown, Menu, Button } from 'antd'
+import { ButtonNoPadding, Row } from 'components/libs'
+import { ProjectPopover } from 'components/project-popover'
+import { useAuth } from 'context/auth-context'
 import { Route, Routes, Navigate } from 'react-router'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Link } from 'react-router-dom'
+import { PeopleScreen } from 'screen/people'
 import { ProjectScreen } from 'screen/project/index'
+import { ProjectListScreen } from 'screen/project-list/index'
 import { ProjectModal } from 'screen/project-list/project-modal'
 import { resetRoute } from 'utils'
-import { ProjectPopover } from 'components/project-popover'
-import { ButtonNoPadding } from 'components/libs'
 
 const AuthenticatedApp = () => {
   return (
@@ -20,6 +20,7 @@ const AuthenticatedApp = () => {
           <MainContent>
             <Routes>
               <Route path={'/projects'} element={<ProjectListScreen />}></Route>
+              <Route path={'/people'} element={<PeopleScreen />}></Route>
               <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
               <Navigate to={'/projects'} />
             </Routes>
@@ -30,6 +31,7 @@ const AuthenticatedApp = () => {
     </Container>
   )
 }
+
 export default AuthenticatedApp
 
 const PageHeader = () => {
@@ -40,7 +42,7 @@ const PageHeader = () => {
           <h2>Logo</h2>
         </ButtonNoPadding>
         <ProjectPopover />
-        <span>用户</span>
+        <Link to={'/people'}>People</Link>
       </HeaderLeft>
       <HeaderRight>
         <User />
@@ -58,7 +60,7 @@ const User = () => {
         <Menu>
           <Menu.Item key={'logout'}>
             <Button type={'link'} onClick={logout}>
-              登出
+              Logout
             </Button>
           </Menu.Item>
         </Menu>
@@ -75,6 +77,7 @@ const Container = styled.div`
   height: 100vh;
   overflow: hidden;
 `
+
 const Header = styled(Row)`
   position: sticky;
   top: 0;
@@ -85,7 +88,12 @@ const Header = styled(Row)`
   z-index: 10;
 `
 
-const HeaderLeft = styled(Row)``
+const HeaderLeft = styled(Row)`
+  a {
+    color: #0f172a;
+    font-weight: 600;
+  }
+`
 
 const HeaderRight = styled.div``
 
