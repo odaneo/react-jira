@@ -1,14 +1,32 @@
 import { ErrorBox } from 'components/libs'
+import styled from '@emotion/styled'
+import { Button } from 'antd'
 import { useDebounce, useDocumentTitle } from 'utils'
 import { useUsers } from 'utils/users'
+import { PeopleInsightsScreen } from './insights'
 import { List } from './list'
 import { SearchPanel } from './search-panel'
 import { Eyebrow, PeopleHero, PeopleListCard, PeopleShell, PeopleToolbar, SummaryCard, SummaryGrid } from './styles'
-import { usePeopleSearchParams } from './util'
+import { usePeopleSearchParams, usePeopleView } from './util'
 
 export const PeopleScreen = () => {
-  useDocumentTitle('人员中心', false)
+  const [view, setView] = usePeopleView()
+  useDocumentTitle(view === 'insights' ? '人员分析' : '人员中心', false)
 
+  if (view === 'insights') {
+    return <PeopleInsightsScreen view={view} setView={setView} />
+  }
+
+  return <PeopleDirectoryScreen view={view} setView={setView} />
+}
+
+const PeopleDirectoryScreen = ({
+  view,
+  setView
+}: {
+  view: 'list' | 'insights'
+  setView: (view: 'list' | 'insights') => void
+}) => {
   const [param, setParam] = usePeopleSearchParams()
   const { data: users, isLoading, error } = useUsers(useDebounce(param, 300))
   const activePeopleCount = users?.length || 0
@@ -41,6 +59,19 @@ export const PeopleScreen = () => {
       </PeopleHero>
 
       <PeopleToolbar data-testid="people-toolbar" className="people-toolbar">
+        <ViewSwitch aria-label="人员视图切换">
+          <ViewButton
+            type="primary"
+            ghost={view === 'list'}
+            data-active={view === 'list'}
+            onClick={() => setView('list')}
+          >
+            成员列表
+          </ViewButton>
+          <ViewButton type="default" data-active={view === 'insights'} onClick={() => setView('insights')}>
+            分析洞察
+          </ViewButton>
+        </ViewSwitch>
         <h2>筛选成员</h2>
         <p>调整筛选条件后，列表和 URL 会保持同步，便于分享和回到当前视图。</p>
         <SearchPanel param={param} setParam={setParam} />
@@ -54,3 +85,20 @@ export const PeopleScreen = () => {
     </PeopleShell>
   )
 }
+
+const ViewSwitch = styled.div`
+  display: inline-flex;
+  gap: 0.8rem;
+  margin-bottom: 1.6rem;
+  flex-wrap: wrap;
+`
+
+const ViewButton = styled(Button)`
+  min-width: 9.6rem;
+
+  &[data-active='true'] {
+    border-color: #1d4ed8;
+    color: #1d4ed8;
+    background: #dbeafe;
+  }
+`
