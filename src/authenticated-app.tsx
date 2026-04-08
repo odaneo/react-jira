@@ -6,6 +6,7 @@ import { useAuth } from 'context/auth-context'
 import { Route, Routes, Navigate } from 'react-router'
 import { BrowserRouter, Link } from 'react-router-dom'
 import { PeopleScreen } from 'screen/people'
+import { PeopleDetailScreen } from 'screen/people/detail'
 import { ProjectScreen } from 'screen/project/index'
 import { ProjectListScreen } from 'screen/project-list/index'
 import { ProjectModal } from 'screen/project-list/project-modal'
@@ -21,6 +22,7 @@ const AuthenticatedApp = () => {
             <Routes>
               <Route path={'/projects'} element={<ProjectListScreen />}></Route>
               <Route path={'/people'} element={<PeopleScreen />}></Route>
+              <Route path={'/people/:userId'} element={<PeopleDetailScreen />}></Route>
               <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
               <Navigate to={'/projects'} />
             </Routes>

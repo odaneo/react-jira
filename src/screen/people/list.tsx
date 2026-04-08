@@ -1,4 +1,5 @@
 import { Table, TableProps } from 'antd'
+import { Link } from 'react-router-dom'
 import { User } from 'types/user'
 
 type PersonRow = Pick<User, 'id' | 'name' | 'organization'>
@@ -14,7 +15,10 @@ export const List = ({ ...props }: ListProps) => {
       columns={[
         {
           title: '姓名',
-          dataIndex: 'name'
+          dataIndex: 'name',
+          render(value: PersonRow['name'], person: PersonRow) {
+            return <Link to={`/people/${person.id}`}>{value}</Link>
+          }
         },
         {
           title: '组织',
