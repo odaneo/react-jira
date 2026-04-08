@@ -40,6 +40,6 @@ const renderAuthenticatedApp = (route = '/projects') => {
 test('renders people route and header entry', () => {
   renderAuthenticatedApp('/people')
 
-  expect(screen.getByRole('heading', { name: /people hub/i })).toBeInTheDocument()
-  expect(screen.getByRole('link', { name: /people/i })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: '人员中心' })).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: '人员中心' })).toBeInTheDocument()
 })

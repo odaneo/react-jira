@@ -51,7 +51,7 @@ async function main() {
   )
 
   await page.goto(WEB_URL, { waitUntil: 'networkidle' })
-  await page.getByRole('heading', { name: 'People Hub' }).waitFor()
+  await page.getByRole('heading', { name: '人员中心' }).waitFor()
 
   const table = page.locator('table')
   await page.waitForFunction(() => document.querySelectorAll('table tbody tr').length > 0)
@@ -61,7 +61,7 @@ async function main() {
   const firstRowText = (initialTexts[0] || '').trim()
   const searchSeed = firstRowText.slice(0, 2)
 
-  const searchInput = page.getByPlaceholder('Search by name')
+  const searchInput = page.getByPlaceholder('按姓名搜索')
   if (!searchSeed) {
     throw new Error('expected the initial people table to include searchable text')
   }

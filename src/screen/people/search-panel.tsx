@@ -28,7 +28,7 @@ export const SearchPanel = ({ param, setParam }: SearchPanelProps) => {
     >
       <Form.Item>
         <Input
-          placeholder={'Search by name'}
+          placeholder={'按姓名搜索'}
           value={param.name}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setParam({
@@ -41,7 +41,7 @@ export const SearchPanel = ({ param, setParam }: SearchPanelProps) => {
 
       <Form.Item>
         <Input
-          placeholder={'Organization'}
+          placeholder={'按组织筛选'}
           value={param.organization}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setParam({

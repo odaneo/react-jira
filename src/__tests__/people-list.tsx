@@ -68,7 +68,7 @@ test('updates search params and filters users by name', async () => {
 
   expect(await screen.findByText('Ada Lovelace')).toBeInTheDocument()
 
-  await userEvent.type(screen.getByPlaceholderText(/search by name/i), 'Grace')
+  await userEvent.type(screen.getByPlaceholderText('按姓名搜索'), 'Grace')
 
   await waitFor(() => expect(screen.getByTestId('location-search')).toHaveTextContent('name=Grace'))
   expect(await screen.findByText('Grace Hopper')).toBeInTheDocument()

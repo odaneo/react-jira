@@ -39,9 +39,9 @@ const renderPeopleScreen = (route = '/people') => {
 test('renders people UI surfaces and empty summary state', async () => {
   renderPeopleScreen()
 
-  expect(await screen.findByText('No people found.')).toBeInTheDocument()
+  expect(await screen.findByText('暂无成员数据')).toBeInTheDocument()
   expect(screen.getByTestId('people-shell').className).toMatch(/people-shell/)
   expect(screen.getByTestId('people-hero').className).toMatch(/people-hero/)
   expect(screen.getByTestId('people-toolbar').className).toMatch(/people-toolbar/)
-  expect(screen.getByText('0 active people')).toBeInTheDocument()
+  expect(screen.getByText('0 位成员')).toBeInTheDocument()
 })

@@ -7,42 +7,42 @@ import { Eyebrow, PeopleHero, PeopleListCard, PeopleShell, PeopleToolbar, Summar
 import { usePeopleSearchParams } from './util'
 
 export const PeopleScreen = () => {
-  useDocumentTitle('People Hub', false)
+  useDocumentTitle('人员中心', false)
 
   const [param, setParam] = usePeopleSearchParams()
   const { data: users, isLoading, error } = useUsers(useDebounce(param, 300))
   const activePeopleCount = users?.length || 0
   const organizationCount = new Set((users || []).map(user => user.organization).filter(Boolean)).size
-  const viewLabel = param.name || param.organization ? 'Filtered view' : 'Full roster'
+  const viewLabel = param.name || param.organization ? '筛选视图' : '完整名单'
 
   return (
     <PeopleShell data-testid="people-shell" className="people-shell">
       <PeopleHero data-testid="people-hero" className="people-hero">
         <div>
-          <Eyebrow>People</Eyebrow>
-          <h1>People Hub</h1>
-          <p>Browse teammates, filter by name or organization, and prepare the ground for deeper people workflows.</p>
+          <Eyebrow>人员视图</Eyebrow>
+          <h1>人员中心</h1>
+          <p>集中查看团队成员，按姓名和组织快速筛选，为后续协作联动和分析视图打好基础。</p>
         </div>
 
         <SummaryGrid>
           <SummaryCard>
-            <span>Live headcount</span>
-            <strong>{activePeopleCount} active people</strong>
+            <span>当前人数</span>
+            <strong>{activePeopleCount} 位成员</strong>
           </SummaryCard>
           <SummaryCard>
-            <span>Organizations</span>
-            <strong>{organizationCount} groups visible</strong>
+            <span>组织数</span>
+            <strong>{organizationCount} 个组织</strong>
           </SummaryCard>
           <SummaryCard>
-            <span>Current mode</span>
+            <span>当前视图</span>
             <strong>{viewLabel}</strong>
           </SummaryCard>
         </SummaryGrid>
       </PeopleHero>
 
       <PeopleToolbar data-testid="people-toolbar" className="people-toolbar">
-        <h2>Refine roster</h2>
-        <p>Update the filters to narrow the visible teammates and keep the URL in sync.</p>
+        <h2>筛选成员</h2>
+        <p>调整筛选条件后，列表和 URL 会保持同步，便于分享和回到当前视图。</p>
         <SearchPanel param={param} setParam={setParam} />
       </PeopleToolbar>
 

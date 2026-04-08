@@ -39,10 +39,10 @@ const PageHeader = () => {
     <Header between={true}>
       <HeaderLeft gap={true}>
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
-          <h2>Logo</h2>
+          <h2>首页</h2>
         </ButtonNoPadding>
         <ProjectPopover />
-        <Link to={'/people'}>People</Link>
+        <Link to={'/people'}>人员中心</Link>
       </HeaderLeft>
       <HeaderRight>
         <User />
@@ -60,13 +60,13 @@ const User = () => {
         <Menu>
           <Menu.Item key={'logout'}>
             <Button type={'link'} onClick={logout}>
-              Logout
+              退出登录
             </Button>
           </Menu.Item>
         </Menu>
       }
     >
-      <Button type={'link'}>Hi, {user?.name}</Button>
+      <Button type={'link'}>你好，{user?.name}</Button>
     </Dropdown>
   )
 }
