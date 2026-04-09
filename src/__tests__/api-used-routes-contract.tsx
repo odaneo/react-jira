@@ -1,4 +1,4 @@
-import { setupServer } from 'msw/node'
+﻿import { setupServer } from 'msw/node'
 import { rest } from 'msw'
 import { http } from 'utils/http'
 
@@ -9,7 +9,7 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-test('POST /tasks 可以提交任务关联字段', async () => {
+test('POST /tasks sends task relation fields', async () => {
   let body: Record<string, unknown> = {}
 
   server.use(
@@ -22,14 +22,14 @@ test('POST /tasks 可以提交任务关联字段', async () => {
   const result = await http('tasks', {
     method: 'POST',
     data: {
-      name: '新任务',
+      name: 'New task',
       projectId: 1,
       kanbanId: 2,
       epicId: 3,
       processorId: 4,
       reporterId: 5,
       typeId: 6,
-      note: '说明',
+      note: 'task note',
       favorite: true
     }
   })
@@ -39,13 +39,13 @@ test('POST /tasks 可以提交任务关联字段', async () => {
     processorId: 4,
     reporterId: 5,
     typeId: 6,
-    note: '说明',
+    note: 'task note',
     favorite: true
   })
   expect(result).toMatchObject({ id: 1, epicId: 3, reporterId: 5 })
 })
 
-test('PATCH /tasks/:id 可以更新任务关联字段', async () => {
+test('PATCH /tasks/:id updates task relation fields', async () => {
   let body: Record<string, unknown> = {}
 
   server.use(
@@ -61,7 +61,7 @@ test('PATCH /tasks/:id 可以更新任务关联字段', async () => {
       id: 8,
       epicId: 11,
       reporterId: 12,
-      note: '更新说明',
+      note: 'updated note',
       favorite: false
     }
   })
@@ -70,13 +70,13 @@ test('PATCH /tasks/:id 可以更新任务关联字段', async () => {
     id: 8,
     epicId: 11,
     reporterId: 12,
-    note: '更新说明',
+    note: 'updated note',
     favorite: false
   })
   expect(result).toMatchObject({ id: 8, epicId: 11, reporterId: 12, favorite: false })
 })
 
-test('POST /epics 可以提交开始和结束时间', async () => {
+test('POST /epics sends start and end timestamps', async () => {
   let body: Record<string, unknown> = {}
 
   server.use(
@@ -89,7 +89,7 @@ test('POST /epics 可以提交开始和结束时间', async () => {
   const result = await http('epics', {
     method: 'POST',
     data: {
-      name: '任务组A',
+      name: 'Epic launch',
       projectId: 1,
       start: 1710000000000,
       end: 1710600000000
@@ -103,7 +103,7 @@ test('POST /epics 可以提交开始和结束时间', async () => {
   expect(result).toMatchObject({ id: 21, start: 1710000000000, end: 1710600000000 })
 })
 
-test('GET /projects 支持 organization 和 pin 查询参数', async () => {
+test('GET /projects sends organization pin and personId query params', async () => {
   let query: Record<string, string> = {}
 
   server.use(
@@ -114,13 +114,44 @@ test('GET /projects 支持 organization 和 pin 查询参数', async () => {
   )
 
   await http('projects', {
-    data: { name: '项目', organization: '研发', pin: true, personId: 3 }
+    data: { name: 'Project', organization: 'Studio', pin: true, personId: 3 }
   })
 
   expect(query).toMatchObject({
-    name: '项目',
-    organization: '研发',
+    name: 'Project',
+    organization: 'Studio',
     pin: 'true',
     personId: '3'
   })
+})
+
+test('GET /users supports name and organization filters for People P1', async () => {
+  let query: Record<string, string> = {}
+
+  server.use(
+    rest.get(`${apiUrl}/users`, (req, res, ctx) => {
+      query = Object.fromEntries(req.url.searchParams)
+      return res(
+        ctx.json([
+          {
+            id: 1,
+            name: 'Ada Lovelace',
+            organization: 'Math Lab',
+            email: 'ada@example.com',
+            title: 'Engineer'
+          }
+        ])
+      )
+    })
+  )
+
+  const result = await http('users', {
+    data: { name: 'Ada', organization: 'Math Lab' }
+  })
+
+  expect(query).toMatchObject({
+    name: 'Ada',
+    organization: 'Math Lab'
+  })
+  expect(result).toMatchObject([{ id: 1, name: 'Ada Lovelace', organization: 'Math Lab' }])
 })

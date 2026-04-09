@@ -1,15 +1,16 @@
 import styled from '@emotion/styled'
-import { useAuth } from 'context/auth-context'
-import { ProjectListScreen } from 'screen/project-list/index'
-import { Row } from 'components/libs'
 import { Dropdown, Menu, Button } from 'antd'
+import { ButtonNoPadding, Row } from 'components/libs'
+import { ProjectPopover } from 'components/project-popover'
+import { useAuth } from 'context/auth-context'
 import { Route, Routes, Navigate } from 'react-router'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Link } from 'react-router-dom'
+import { PeopleScreen } from 'screen/people'
+import { PeopleDetailScreen } from 'screen/people/detail'
 import { ProjectScreen } from 'screen/project/index'
+import { ProjectListScreen } from 'screen/project-list/index'
 import { ProjectModal } from 'screen/project-list/project-modal'
 import { resetRoute } from 'utils'
-import { ProjectPopover } from 'components/project-popover'
-import { ButtonNoPadding } from 'components/libs'
 
 const AuthenticatedApp = () => {
   return (
@@ -20,6 +21,8 @@ const AuthenticatedApp = () => {
           <MainContent>
             <Routes>
               <Route path={'/projects'} element={<ProjectListScreen />}></Route>
+              <Route path={'/people'} element={<PeopleScreen />}></Route>
+              <Route path={'/people/:userId'} element={<PeopleDetailScreen />}></Route>
               <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
               <Navigate to={'/projects'} />
             </Routes>
@@ -30,6 +33,7 @@ const AuthenticatedApp = () => {
     </Container>
   )
 }
+
 export default AuthenticatedApp
 
 const PageHeader = () => {
@@ -37,10 +41,10 @@ const PageHeader = () => {
     <Header between={true}>
       <HeaderLeft gap={true}>
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
-          <h2>Logo</h2>
+          <h2>首页</h2>
         </ButtonNoPadding>
         <ProjectPopover />
-        <span>用户</span>
+        <Link to={'/people'}>人员中心</Link>
       </HeaderLeft>
       <HeaderRight>
         <User />
@@ -58,13 +62,13 @@ const User = () => {
         <Menu>
           <Menu.Item key={'logout'}>
             <Button type={'link'} onClick={logout}>
-              登出
+              退出登录
             </Button>
           </Menu.Item>
         </Menu>
       }
     >
-      <Button type={'link'}>Hi, {user?.name}</Button>
+      <Button type={'link'}>你好，{user?.name}</Button>
     </Dropdown>
   )
 }
@@ -75,6 +79,7 @@ const Container = styled.div`
   height: 100vh;
   overflow: hidden;
 `
+
 const Header = styled(Row)`
   position: sticky;
   top: 0;
@@ -85,7 +90,12 @@ const Header = styled(Row)`
   z-index: 10;
 `
 
-const HeaderLeft = styled(Row)``
+const HeaderLeft = styled(Row)`
+  a {
+    color: #0f172a;
+    font-weight: 600;
+  }
+`
 
 const HeaderRight = styled.div``
 
