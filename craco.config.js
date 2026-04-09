@@ -19,6 +19,8 @@ module.exports = {
               '@body-background': '#F8FAFC',
               '@text-color': '#1E293B',
               '@text-color-secondary': '#475569',
+              '@font-family':
+                "-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Source Han Sans SC', 'WenQuanYi Micro Hei', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
               '@font-size-base': '16px'
             },
             javascriptEnabled: true
