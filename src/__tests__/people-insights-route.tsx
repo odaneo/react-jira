@@ -73,7 +73,7 @@ test('renders insights view with filters and KPI cards', async () => {
   expect(screen.getByText('组织分组')).toBeInTheDocument()
   expect(screen.getByText('任务负载')).toBeInTheDocument()
   expect(screen.getByText('协作进度')).toBeInTheDocument()
-  expect(screen.getByText('风险成员')).toBeInTheDocument()
+  expect(screen.getAllByText('风险成员').length).toBeGreaterThan(0)
   expect(screen.getByText('覆盖项目')).toBeInTheDocument()
 })
 

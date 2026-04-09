@@ -7,31 +7,30 @@ import { PeopleInsightsScreen } from './insights'
 import { List } from './list'
 import { SearchPanel } from './search-panel'
 import { Eyebrow, PeopleHero, PeopleListCard, PeopleShell, PeopleToolbar, SummaryCard, SummaryGrid } from './styles'
-import { usePeopleSearchParams, usePeopleView } from './util'
+import { PeopleView, usePeopleSearchParams, usePeopleView } from './util'
+import { PeopleWorkbenchScreen } from './workbench-layout'
 
 export const PeopleScreen = () => {
   const [view, setView] = usePeopleView()
-  useDocumentTitle(view === 'insights' ? '人员分析' : '人员中心', false)
+  useDocumentTitle(view === 'insights' ? '人员分析' : view === 'workbench' ? '角色工作台' : '人员中心', false)
 
   if (view === 'insights') {
     return <PeopleInsightsScreen view={view} setView={setView} />
   }
 
+  if (view === 'workbench') {
+    return <PeopleWorkbenchScreen view={view} setView={setView} />
+  }
+
   return <PeopleDirectoryScreen view={view} setView={setView} />
 }
 
-const PeopleDirectoryScreen = ({
-  view,
-  setView
-}: {
-  view: 'list' | 'insights'
-  setView: (view: 'list' | 'insights') => void
-}) => {
+const PeopleDirectoryScreen = ({ view, setView }: { view: PeopleView; setView: (view: PeopleView) => void }) => {
   const [param, setParam] = usePeopleSearchParams()
   const { data: users, isLoading, error } = useUsers(useDebounce(param, 300))
   const activePeopleCount = users?.length || 0
   const organizationCount = new Set((users || []).map(user => user.organization).filter(Boolean)).size
-  const viewLabel = param.name || param.organization ? '筛选视图' : '完整名单'
+  const viewLabel = param.name || param.organization ? '筛选结果' : '完整名单'
 
   return (
     <PeopleShell data-testid="people-shell" className="people-shell">
@@ -60,16 +59,14 @@ const PeopleDirectoryScreen = ({
 
       <PeopleToolbar data-testid="people-toolbar" className="people-toolbar">
         <ViewSwitch aria-label="人员视图切换">
-          <ViewButton
-            type="primary"
-            ghost={view === 'list'}
-            data-active={view === 'list'}
-            onClick={() => setView('list')}
-          >
+          <ViewButton type="default" data-active={view === 'list'} onClick={() => setView('list')}>
             成员列表
           </ViewButton>
           <ViewButton type="default" data-active={view === 'insights'} onClick={() => setView('insights')}>
             分析洞察
+          </ViewButton>
+          <ViewButton type="default" data-active={view === 'workbench'} onClick={() => setView('workbench')}>
+            角色工作台
           </ViewButton>
         </ViewSwitch>
         <h2>筛选成员</h2>

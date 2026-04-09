@@ -17,6 +17,7 @@
     "antd": "^4.14.0",
     "craco-less": "^1.17.1",
     "dayjs": "^1.10.4",
+    "framer-motion": "4.1.17",
     "history": "^5.0.0",
     "jira-dev-tool": "^1.6.59",
     "react": "^17.0.1",

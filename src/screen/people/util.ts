@@ -3,6 +3,9 @@ import { User } from 'types/user'
 import { clearObject } from 'utils'
 import { useUrlQueryParam } from 'utils/url'
 
+export type PeopleView = 'list' | 'insights' | 'workbench'
+export type PeopleInsightsRange = 'all' | '30d' | '90d'
+
 export const usePeopleSearchParams = () => {
   const [param, setParam] = useUrlQueryParam(['name', 'organization'])
 
@@ -26,18 +29,16 @@ export const usePeopleQueryKey = () => {
 
 export const usePeopleView = () => {
   const [param, setParam] = useUrlQueryParam(['view'])
-  const view = param.view === 'insights' ? 'insights' : 'list'
+  const view: PeopleView = param.view === 'insights' ? 'insights' : param.view === 'workbench' ? 'workbench' : 'list'
 
   return [
     view,
-    (nextView: 'list' | 'insights') =>
+    (nextView: PeopleView) =>
       setParam({
         view: nextView === 'list' ? undefined : nextView
       })
   ] as const
 }
-
-export type PeopleInsightsRange = 'all' | '30d' | '90d'
 
 export const usePeopleInsightsParams = () => {
   const [param, setParam] = useUrlQueryParam(['range', 'projectId', 'group'])

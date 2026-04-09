@@ -16,15 +16,9 @@ import {
   InsightsSwitchButton,
   InsightsToolbar
 } from './insights-styles'
-import { usePeopleInsightsParams } from './util'
+import { PeopleInsightsRange, PeopleView, usePeopleInsightsParams } from './util'
 
-export const PeopleInsightsScreen = ({
-  view,
-  setView
-}: {
-  view: 'list' | 'insights'
-  setView: (view: 'list' | 'insights') => void
-}) => {
+export const PeopleInsightsScreen = ({ view, setView }: { view: PeopleView; setView: (view: PeopleView) => void }) => {
   const [filters, setFilters] = usePeopleInsightsParams()
   const { data: users = [], error: usersError } = useUsers()
   const { data: tasks = [], error: tasksError } = useTasks()
@@ -61,21 +55,21 @@ export const PeopleInsightsScreen = ({
         <div>
           <Eyebrow>分析视图</Eyebrow>
           <h1>人员分析</h1>
-          <p>把成员负载、协作进度和风险信号集中展示，先形成稳定的洞察骨架，再继续增强图表联动。</p>
+          <p>围绕成员负载、协作效率和风险状态，形成可比较的团队交付洞察。</p>
         </div>
 
         <SummaryGrid>
           <SummaryCard>
-            <span>参与成员</span>
+            <span>覆盖成员</span>
             <strong>{insights.filteredUsers.length} 位成员</strong>
           </SummaryCard>
           <SummaryCard>
-            <span>当前风险</span>
-            <strong>{insights.summary.riskCount} 位高风险</strong>
+            <span>风险成员</span>
+            <strong>{insights.summary.riskCount} 位成员</strong>
           </SummaryCard>
           <SummaryCard>
-            <span>视图状态</span>
-            <strong>{view === 'insights' ? '分析洞察' : '成员列表'}</strong>
+            <span>当前视图</span>
+            <strong>分析洞察</strong>
           </SummaryCard>
         </SummaryGrid>
       </PeopleHero>
@@ -84,19 +78,21 @@ export const PeopleInsightsScreen = ({
         <InsightsHeader>
           <div>
             <h2>人员分析</h2>
-            <p>筛选不同时间、项目和组织后，指标卡与图表会同步更新。</p>
+            <p>通过时间范围、项目范围和组织分组观察团队状态变化。</p>
           </div>
           <InsightsSwitch aria-label="人员视图切换">
             <InsightsSwitchButton type="default" data-active={view === 'list'} onClick={() => setView('list')}>
               成员列表
             </InsightsSwitchButton>
-            <InsightsSwitchButton
-              type="primary"
-              ghost={view === 'insights'}
-              data-active={view === 'insights'}
-              onClick={() => setView('insights')}
-            >
+            <InsightsSwitchButton type="default" data-active={view === 'insights'} onClick={() => setView('insights')}>
               分析洞察
+            </InsightsSwitchButton>
+            <InsightsSwitchButton
+              type="default"
+              data-active={view === 'workbench'}
+              onClick={() => setView('workbench')}
+            >
+              角色工作台
             </InsightsSwitchButton>
           </InsightsSwitch>
         </InsightsHeader>
@@ -106,11 +102,11 @@ export const PeopleInsightsScreen = ({
             时间范围
             <InsightsSelect
               value={filters.range}
-              onChange={value => setFilters({ ...filters, range: value as typeof filters.range })}
+              onChange={value => setFilters({ ...filters, range: value as PeopleInsightsRange })}
               options={[
                 { label: '全部时间', value: 'all' },
-                { label: '近 30 天', value: '30d' },
-                { label: '近 90 天', value: '90d' }
+                { label: '最近 30 天', value: '30d' },
+                { label: '最近 90 天', value: '90d' }
               ]}
             />
           </InsightsField>
